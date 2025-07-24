@@ -7,7 +7,7 @@ public class Success<T> implements Result<T>{
         this.value = t;
     }
 
-    public void bind(Effect<T> succes, Effect<T> failure) {
-        succes.apply(value);
+    public void bind(Effect<T> success, Effect<T> failure) {
+        success.apply(value);
     }
 }

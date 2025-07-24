@@ -1,9 +1,6 @@
 package util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -145,6 +142,48 @@ public class CollectionUtilities {
                 ? list()
                 : prepend(range(start + 1, end), start);
     }
+
+    public static <T> List<T> insert(T elem, List<T> lista, Comparator<T> comp) {
+        Objects.requireNonNull(comp, "Comparator cannot be null");
+        Objects.requireNonNull(elem, "Element cannot be null");
+        Objects.requireNonNull(lista, "List cannot be null");
+        
+        if (lista.isEmpty()) return list(elem);
+        
+        // Use iteration instead of recursion for better performance
+        List<T> result = new ArrayList<>();
+        boolean inserted = false;
+        
+        for (T current : lista) {
+            if (!inserted && comp.compare(elem, current) <= 0) {
+                result.add(elem);
+                inserted = true;
+            }
+            result.add(current);
+        }
+        
+        if (!inserted) {
+            result.add(elem);
+        }
+        
+        return List.copyOf(result);
+    }
+
+
+    public static <T> List<T> sortFold(List<T> lista, Comparator<T> comp) {
+        return foldLeft(lista, list(), (sorted, current) ->
+                insert(current, sorted, comp)
+        );
+    }
+
+    public static <T> List<T> sort(List<T> lista, Comparator<T> comp) {
+        return lista.isEmpty()
+                ? list()
+                : head(lista).map(h ->
+                insert(h, sort(tail(lista).orElse(list()), comp), comp)
+        ).orElse(list());
+    }
+
 
     public record Pair<A, B>(A a, B b) { }
 }

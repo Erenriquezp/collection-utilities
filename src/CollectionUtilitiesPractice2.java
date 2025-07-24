@@ -21,6 +21,17 @@ public class CollectionUtilitiesPractice2 {
         List<Integer> primos = primosHasta(10);
         System.out.println("Primos hasta 10: " + primos);
 
+        // Combinación de dos listas
+        List<Integer> lista1 = list(1, 2, 3);
+        List<Integer> lista2 = list(4, 5, 6);
+        List<Pair<Integer, Integer>> combinados = combinar(lista1, lista2);
+        System.out.println("Combinación de listas: " + combinados);
+
+        // Ordenar una lista
+        List<Integer> desordenada = list(5, 2, 9, 1, 3);
+        List<Integer> ordenada = sort(desordenada, Integer::compareTo);
+        System.out.println("Ordenada: " + ordenada);
+
     }
 
     // Calcular promedio
@@ -89,5 +100,15 @@ public class CollectionUtilitiesPractice2 {
 
     private static <T> boolean contiene(List<T> lista, T elem) {
         return lista.contains(elem);
+    }
+
+    // Determinar si una lista es palíndroma
+    public static <T> boolean esPalindroma(List<T> lista) {
+        List<T> invertida = invertir(lista);
+        return foldLeft(
+                lista,
+                true,
+                (acc, elem) -> acc && elem.equals(head(invertida).orElse(null))
+        );
     }
 }
